@@ -5,9 +5,9 @@ import os
 from dotenv import load_dotenv
 
 # Configuración
-BROKER = "localhost"  # o la IP de tu broker
+BROKER = "192.168.1.234"  # o la IP de tu broker
 PORT = 1883
-TOPIC = "sensor/temperatura"  # Topic al que te suscribes
+TOPIC = "pico/test" #"sensor/temperatura"  # Topic al que te suscribes
 USERNAME = None  # Si no requiere autenticación
 PASSWORD = None  # Si no requiere autenticación
 
