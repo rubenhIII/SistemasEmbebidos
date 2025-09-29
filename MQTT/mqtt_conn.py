@@ -4,6 +4,23 @@ import os
 
 from dotenv import load_dotenv
 
+import influxdb_client
+from influxdb_client.client.write_api import SYNCHRONOUS
+import random
+from time import sleep
+
+bucket = "SistemasEmbebidos"
+org = "SistemasEmbebidos"
+token = "5iGA2cw9NutdiBGh5Q-NF_PWN597o3pBuzR06xShcFOMctQ1yInWp6FY-VxCDqzD7iLyCeopPjzNA1mic3aZxA=="
+# Store the URL of your InfluxDB instance
+url="http://192.168.1.254:8086"
+
+client = influxdb_client.InfluxDBClient(
+    url=url,
+    token=token,
+    org=org
+)
+
 # Configuración
 BROKER = "localhost"#"192.168.1.254"  # o la IP de tu broker
 PORT = 1883
@@ -33,6 +50,8 @@ def on_message(client, userdata, msg):
     datos = mqtt_to_dict(msg.payload.decode())
     mediciones = datos.keys()
     temperatura = datos['temperatura'] if 'temperatura' in mediciones else float('nan')
+    p = influxdb_client.Point("medicion_temp").tag("alumno", "ruben").field("temperatura", temperatura)
+    write_api.write(bucket=bucket, org=org, record=p)
     
 # Configuración del cliente
 client = mqtt.Client()

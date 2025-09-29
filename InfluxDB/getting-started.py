@@ -3,9 +3,9 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import random
 from time import sleep
 
-bucket = "embebidos"
+bucket = "SistemasEmbebidos"
 org = "SistemasEmbebidos"
-token = "iGnFUOZlqsDGGDuAQuy41ffCMU0j58sa-Pa8cc29aIu9QJN9FBAmnbLrFNmSE3lvK6tCWWA4ehD5vE4UTp2yoA=="
+token = "5iGA2cw9NutdiBGh5Q-NF_PWN597o3pBuzR06xShcFOMctQ1yInWp6FY-VxCDqzD7iLyCeopPjzNA1mic3aZxA=="
 # Store the URL of your InfluxDB instance
 url="http://192.168.1.254:8086"
 
