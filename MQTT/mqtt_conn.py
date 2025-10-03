@@ -27,6 +27,7 @@ PORT = 1883
 TOPIC = "pico/temperatura" #"sensor/temperatura"  # Topic al que te suscribes
 USERNAME = None  # Si no requiere autenticación
 PASSWORD = None  # Si no requiere autenticación
+write_api = client.write_api(write_options=SYNCHRONOUS)
 
 def mqtt_to_dict(mqtt_msg)->dict:
     try:
