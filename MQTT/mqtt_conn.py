@@ -13,7 +13,7 @@ bucket = "SistemasEmbebidos"
 org = "SistemasEmbebidos"
 token = "5iGA2cw9NutdiBGh5Q-NF_PWN597o3pBuzR06xShcFOMctQ1yInWp6FY-VxCDqzD7iLyCeopPjzNA1mic3aZxA=="
 # Store the URL of your InfluxDB instance
-url="http://192.168.1.254:8086"
+url="http://localhost:8086"
 
 client = influxdb_client.InfluxDBClient(
     url=url,

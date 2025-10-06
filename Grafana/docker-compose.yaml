@@ -3,6 +3,8 @@ version: '3.8'
 services:
   grafana:
     image: grafana/grafana:9.5.2
+    networks:
+      - monitoring
     container_name: grafana
     restart: unless-stopped
     user: "472:472"
@@ -28,8 +30,8 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
       - ./grafana/plugins:/var/lib/grafana/plugins
-    networks:
-      - monitoring
+        # networks:
+        #- monitoring
 
 volumes:
   grafana_storage:
@@ -41,4 +43,6 @@ volumes:
 
 networks:
   monitoring:
-    driver: bridge
+    external: true
+    name: monitoring
+    #driver: bridge
