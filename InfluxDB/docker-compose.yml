@@ -6,14 +6,16 @@ services:
     ports:
       - "8086:8086"
     volumes:
-      - ./influxdb_data:/var/lib/influxdb2
-      - ./influxdb_config:/etc/influxdb2
+      # CORREGIDO: Volúmenes nombrados para mejor persistencia
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
       - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
       - DOCKER_INFLUXDB_INIT_ORG=mi_org
       - DOCKER_INFLUXDB_INIT_BUCKET=mi_bucket
+    user: "1000:1000"  # RECOMENDADO: Ejecutar como usuario no-root
     networks:
       - monitoring-network
 
@@ -27,15 +29,15 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=password123
-        #- GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_password
+      #- GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_password
       - GF_USERS_ALLOW_SIGN_UP=false
-        #- GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      #- GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_PATHS_DATA=/var/lib/grafana
       - GF_PATHS_LOGS=/var/log/grafana
       - GF_PATHS_PLUGINS=/var/lib/grafana/plugins
     volumes:
-      # Volúmenes nombrados para persistencia
+      # Volúmenes nombrados para persistencia (CORRECTO)
       - grafana_storage:/var/lib/grafana
       - grafana_config:/etc/grafana
       - grafana_logs:/var/log/grafana
@@ -48,12 +50,20 @@ services:
       - monitoring-network
 
 volumes:
+  # NUEVO: Volúmenes para InfluxDB
+  influxdb_data:
+    name: influxdb-data
+  influxdb_config:
+    name: influxdb-config
+  
+  # EXISTENTE: Volúmenes para Grafana (correctos)
   grafana_storage:
     name: grafana-storage
   grafana_config:
     name: grafana-config
   grafana_logs:
-    name: grafana-logs        
+    name: grafana-logs
+
 networks:
   monitoring-network:
     driver: bridge

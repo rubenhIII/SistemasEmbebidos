@@ -11,7 +11,7 @@ from time import sleep
 
 bucket = "SistemasEmbebidos"
 org = "SistemasEmbebidos"
-token = "5iGA2cw9NutdiBGh5Q-NF_PWN597o3pBuzR06xShcFOMctQ1yInWp6FY-VxCDqzD7iLyCeopPjzNA1mic3aZxA=="
+token = "kq-Bgw8Hz8vb_onv3nEZWkUBWhfOYog1tM_b4tnJhYCrGw0G8VR7iFxyIikVyedA-oQFBqMLXX4rdMHcjwhVtw=="
 # Store the URL of your InfluxDB instance
 url="http://localhost:8086"
 
@@ -51,8 +51,13 @@ def on_message(client, userdata, msg):
     datos = mqtt_to_dict(msg.payload.decode())
     mediciones = datos.keys()
     temperatura = datos['temperatura'] if 'temperatura' in mediciones else float('nan')
-    p = influxdb_client.Point("medicion_temp").tag("alumno", "ruben").field("temperatura", temperatura)
+    alumno = datos['alumno'] if 'alumno' in mediciones else ''
+    humedad = datos['humedad'] if 'humedad' in mediciones else float('nan') 
+    p = influxdb_client.Point("medicion_temp").tag("alumno", alumno).field("temperatura", temperatura)
+    ph =  influxdb_client.Point("medicion_humedad").tag("alumno", alumno).field("humedad", humedad)
     write_api.write(bucket=bucket, org=org, record=p)
+    write_api.write(bucket=bucket, org=org, record=ph)
+
     
 # Configuración del cliente
 client = mqtt.Client()
