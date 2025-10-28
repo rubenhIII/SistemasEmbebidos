@@ -1,10 +1,7 @@
 import machine
 from time import sleep
 
-
-
 gps = machine.UART(1, baudrate=9600, tx=4, rx=5)
-
 try:
     while True:
         if gps.any():
