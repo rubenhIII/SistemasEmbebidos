@@ -25,7 +25,6 @@ def scan_wifi():
 
 my_gps = MicropyGPS()
 gps_serial = UART(1, baudrate=9600, tx=Pin(4), rx=Pin(5))
-display_serial = UART(0, baudrate=9600, tx=Pin(0), rx=Pin(1))
 
 last_display_update = 0
 display_update_interval = 5000
@@ -47,29 +46,6 @@ while True:
                 latitude = str(my_gps._latitude[0])
                 longitude = str(round(my_gps._longitude[1],3))
 
-                lat_d = f'latitude.txt="{my_gps._latitude[0]}'.encode('iso-8859-1')
-                lat_m = f'{round(my_gps._latitude[1],1)} {my_gps._latitude[2]}'.encode('iso-8859-1')
-                lon_d = f'longitude.txt="{my_gps._longitude[0]}'.encode('iso-8859-1')
-                lon_m = f'{round(my_gps._longitude[1],1)} {my_gps._longitude[2]}'.encode('iso-8859-1')
-
-                display_serial.write(lat_d)
-                display_serial.write(b'\xb0')
-                display_serial.write(lat_m)
-                display_serial.write('"'.encode('iso-8859-1'))
-                display_serial.write(b'\xFF\xFF\xFF')
-
-                print(f'{lat_d} {lat_m}')
-
-                sleep(0.1)
-
-                display_serial.write(lon_d)
-                display_serial.write(b'\xb0')
-                display_serial.write(lon_m)
-                display_serial.write('"'.encode('iso-8859-1'))
-                display_serial.write(b'\xFF\xFF\xFF')
-
-                #print(f'{lon_d} {lon_m}')
-
             last_display_update = current_time
 
             wifi_networks = scan_wifi()
@@ -78,14 +54,11 @@ while True:
                 wifi_text = ""
                 for net in wifi_networks:
                     auth_mode = security[net[4]]
-                    #print(f'{net[0].decode()} {binascii.hexlify(net[1]).decode()} {net[2]} {str(net[3])} {auth_mode} {str(net[5])}')    
+                    print(f'{net[0].decode()} {binascii.hexlify(net[1]).decode()} {net[2]} {str(net[3])} {auth_mode} {str(net[5])}')    
                     wifi_str = wifi_str + f'{net[0].decode()} {auth_mode}\r\n'
                     wifi_text = wifi_text + f"{net[0].decode()} {auth_mode} {latitude}° {longitude}'\r\n"
                 
                 wifi_str = wifi_str + '"'
-                display_serial.write(wifi_str)
-                display_serial.write(b'\xFF\xFF\xFF')
-
                 with open(wifi_file, 'a') as file:
                     file.write(wifi_text)
         sleep(15)
